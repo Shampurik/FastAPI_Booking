@@ -26,7 +26,7 @@ def get_hotels(
         "name": "Владимир",
         "stars": 5,
         "has_spa": True,
-        "lox": "loxs"
+        "lox": "loxs",
     }
     return [hotel]
 
@@ -35,6 +35,7 @@ class SBooking(BaseModel):
     room_id: int
     date_from: date
     date_to: date
+
 
 @app.post("/bookings")
 def add_booking(booking: SBooking):
