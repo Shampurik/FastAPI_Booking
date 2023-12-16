@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Query
 from datetime import date
+
+from fastapi import FastAPI, Query
 from pydantic import BaseModel
 
 from app.bookings.router import router as router_bookings
@@ -45,3 +46,6 @@ class SBooking(BaseModel):
 @app.post("/bookings")
 def add_booking(booking: SBooking):
     pass
+
+
+# uvicorn app.main:app --reload
