@@ -1,40 +1,19 @@
-from datetime import date
-
-from fastapi import FastAPI, Query
-from pydantic import BaseModel
+import uvicorn
+from fastapi import FastAPI
 
 from app.bookings.router import router as router_bookings
+from app.hotels.rooms.router import router as router_rooms
+from app.hotels.router import router as router_hotels
 from app.users.router import router as router_users
 
 app = FastAPI()
 
 app.include_router(router_users)
 app.include_router(router_bookings)
-
-
-class SHotels(BaseModel):
-    address: str
-    name: str
-    stars: int
-    has_spa: bool
-
-
-@app.get("/hotels")
-def get_hotels(
-    location: str,
-    date_from: date,
-    date_to: date,
-    stars: int | None = Query(None, ge=1, le=5),
-    has_spa: bool | None = None,
-) -> list[SHotels]:
-    hotel = {
-        "address": "улица Валдай, морозильник 13",
-        "name": "Владимир",
-        "stars": 5,
-        "has_spa": True,
-        "lox": "loxs",
-    }
-    return [hotel]
+app.include_router(router_hotels)
+app.include_router(router_rooms)
 
 
 # uvicorn app.main:app --reload
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

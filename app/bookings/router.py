@@ -1,6 +1,6 @@
 from datetime import date
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 
 from app.bookings.dao import BookingDAO
 from app.bookings.schemas import SBooking
@@ -26,3 +26,17 @@ async def add_booking(
     user: Users = Depends(get_current_user),
 ):
     await BookingDAO.add(user.id, room_id, date_from, date_to)
+
+
+@router.delete("/{booking_id}")
+async def delete_booking(
+    response: Response,
+    booking_id: int,
+    user: Users = Depends(get_current_user),
+):
+    """Deletes booking for user"""
+    await BookingDAO.delete_booking_for_user(
+        booking_id=int(booking_id), user_id=user.id
+    )
+    response.status_code = 204
+    return {"delete": "ok"}

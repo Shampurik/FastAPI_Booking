@@ -1,13 +1,38 @@
+from datetime import date
+
 from sqlalchemy import and_, func, insert, or_, select
 
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
 from app.database import async_session_maker, engine
-from app.hotels.models import Rooms
+from app.exceptions import UserOrBookingNotFound
+from app.hotels.rooms.models import Rooms
 
 
 class BookingDAO(BaseDAO):
     model = Bookings
+
+    @classmethod
+    async def get_booking_rooms_by_id(
+        cls, room_id: int, date_from: date, date_to: date
+    ):
+        if date_from >= date_to:
+            raise ValueError
+
+        return await cls.find_all_filter(
+            and_(
+                Bookings.room_id == room_id,
+                and_(Bookings.date_to >= date_from, Bookings.date_from <= date_to),
+            )
+        )
+
+    @classmethod
+    async def delete_booking_for_user(cls, booking_id: int, user_id: int) -> None:
+        """Checking if a user has a booking in the database"""
+        if not await cls.find_one_or_none(id=booking_id, user_id=user_id):
+            raise UserOrBookingNotFound
+
+        await cls.delete_rows_filer_by(id=booking_id, user_id=user_id)
 
     @classmethod
     async def add(

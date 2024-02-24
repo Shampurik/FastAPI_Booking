@@ -1,17 +1,18 @@
-from logging.config import fileConfig
 import sys
+from logging.config import fileConfig
 from os.path import abspath, dirname
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 sys.path.insert(0, dirname(dirname(dirname(abspath(__file__)))))
 
-from app.database import Base, DATABASE_URL  # noqa: E402
-from app.hotels.models import Hotels, Rooms  # noqa: E402, F401 Disabling RUFF errors, because it needs to import Hotel models to pass its metadata to Base model
 from app.bookings.models import Bookings  # noqa: E402, F401
+from app.database import DATABASE_URL, Base  # noqa: E402
+from app.hotels.models import (
+    Hotels,  # noqa: E402, F401 Disabling RUFF errors, because it needs to import Hotel models to pass its metadata to Base model
+)
+from app.hotels.rooms.models import Rooms  # noqa: E402, F401
 from app.users.models import Users  # noqa: E402, F401
 
 # this is the Alembic Config object, which provides
@@ -75,9 +76,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
