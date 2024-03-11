@@ -5,7 +5,7 @@ from sqlalchemy import and_, func, insert, or_, select
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
 from app.database import async_session_maker, engine
-from app.exceptions import UserOrBookingNotFound
+from app.exceptions import InvalidDates, UserOrBookingNotFound
 from app.hotels.rooms.models import Rooms
 
 
@@ -17,7 +17,7 @@ class BookingDAO(BaseDAO):
         cls, room_id: int, date_from: date, date_to: date
     ):
         if date_from >= date_to:
-            raise ValueError
+            raise InvalidDates
 
         return await cls.find_all_filter(
             and_(

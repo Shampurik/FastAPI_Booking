@@ -36,3 +36,8 @@ class NotAuthenticated(DetailedHTTPException):
 class UserOrBookingNotFound(DetailedHTTPException):
     STATUS_CODE = status.HTTP_404_NOT_FOUND
     DETAIL = "User or booking with these ids not found"
+
+
+class InvalidDates(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_400_BAD_REQUEST
+    DETAIL = "Dates are invalid. Date from is equal or greater than date to."
