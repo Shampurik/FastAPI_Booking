@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     DB_PASS: str
     DB_NAME: str
 
+    SMTP_HOST: str
+    SMTP_PORT: str
+    SMTP_USER_EMAIL: str
+    SMTP_PASS: str
+
     AUTH_KEY: str
     AUTH_ALGORITHM: str
 
