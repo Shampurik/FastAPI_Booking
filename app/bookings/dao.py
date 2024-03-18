@@ -4,7 +4,7 @@ from sqlalchemy import and_, func, insert, or_, select
 
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
-from app.database import async_session_maker, engine
+from app.database import async_session_maker
 from app.exceptions import InvalidDates, UserOrBookingNotFound
 from app.hotels.rooms.models import Rooms
 
@@ -87,9 +87,9 @@ class BookingDAO(BaseDAO):
                 .group_by(Rooms.quantity, booked_rooms.c.room_id)
             )
 
-            print(
-                get_rooms_left.compile(engine, compile_kwargs={"literal_binds": True})
-            )
+            # print(
+            #     get_rooms_left.compile(engine, compile_kwargs={"literal_binds": True})
+            # )
 
             rooms_left = await session.execute(get_rooms_left)
             rooms_left: int = rooms_left.scalar()
