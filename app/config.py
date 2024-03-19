@@ -22,6 +22,8 @@ class Settings(DbSettings):
     AUTH_KEY: str
     AUTH_ALGORITHM: str
 
+    EXPIRE_CACHE: int = Field(60 * 5, env="EXPIRE_CACHE")
+
     class Config:
         env_file = ".env"
         case_sensitive = False

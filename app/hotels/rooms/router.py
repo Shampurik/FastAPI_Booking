@@ -3,6 +3,7 @@ from datetime import date
 from fastapi import APIRouter
 from fastapi_cache.decorator import cache
 
+from app.config import settings
 from app.hotels.rooms.dao import RoomsDAO
 from app.hotels.rooms.schemas import SRoomsLeft
 
@@ -10,7 +11,7 @@ router = APIRouter(prefix="/hotels", tags=["Rooms"])
 
 
 @router.get("/{hotel_id}/rooms")
-@cache(expire=30)
+@cache(expire=settings.EXPIRE_CACHE)
 async def get_all_rooms_by_hotel_id(
     hotel_id: str, date_from: date, date_to: date
 ) -> list[SRoomsLeft]:
