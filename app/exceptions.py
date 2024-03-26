@@ -16,8 +16,9 @@ class PermissionDenied(DetailedHTTPException):
     DETAIL = "Permission denied"
 
 
-class NotFound(DetailedHTTPException):
+class HotelNotFound(DetailedHTTPException):
     STATUS_CODE = status.HTTP_404_NOT_FOUND
+    DETAIL = "Hotel(s) not found"
 
 
 class BadRequest(DetailedHTTPException):
