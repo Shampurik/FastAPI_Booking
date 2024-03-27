@@ -1,5 +1,5 @@
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class DbSettings(BaseSettings):
@@ -14,6 +14,10 @@ class DbSettings(BaseSettings):
 
 
 class Settings(DbSettings):
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
+
+    START_MODE: Literal["DEV", "TEST", "PROD"] = Field("DEV")
+
     SMTP_HOST: str
     SMTP_PORT: str = Field(465, env="SMTP_PORT")
     SMTP_USER_EMAIL: str
@@ -22,11 +26,7 @@ class Settings(DbSettings):
     AUTH_KEY: str
     AUTH_ALGORITHM: str
 
-    EXPIRE_CACHE: int = Field(60 * 5, env="EXPIRE_CACHE")
-
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    EXPIRE_CACHE: int = Field(60 * 5)
 
 
 settings = Settings()
